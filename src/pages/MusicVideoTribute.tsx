@@ -7,7 +7,7 @@ import { useMusic } from '../context/MusicContext'
 
 // ── 💌 CUSTOMIZE: Edit the personal note below ──
 const PERSONAL_NOTE = {
-  title: 'For Sheoshri ❤️',
+  title: 'For Shreyasi ❤️',
   body: `This isn't a perfect video.
 
 I might smile too much.

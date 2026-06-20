@@ -690,7 +690,7 @@ const CakeCelebration: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
               >
                 <h1 className="heading-romantic text-3xl sm:text-4xl font-bold text-pink-600">
-                  For Sheoshri, with Love ❤️
+                  For Shreyasi, with Love ❤️
                 </h1>
               </motion.div>
             )}
@@ -1051,7 +1051,7 @@ const CakeCelebration: React.FC = () => {
                     fontFamily="'Dancing Script', cursive"
                     opacity="0.85"
                   >
-                    Sheoshri 💖
+                    Shreyasi 💖
                   </text>
                   <text
                     x="250"
@@ -1063,7 +1063,7 @@ const CakeCelebration: React.FC = () => {
                     letterSpacing="1"
                     fontFamily="'Dancing Script', cursive"
                   >
-                    Sheoshri 💖
+                    Shreyasi 💖
                   </text>
                 </motion.g>
                 {/* Right Text */}
@@ -1084,7 +1084,7 @@ const CakeCelebration: React.FC = () => {
                     fontFamily="'Dancing Script', cursive"
                     opacity="0.85"
                   >
-                    Sheoshri 💖
+                    Shreyasi 💖
                   </text>
                   <text
                     x="250"
@@ -1096,7 +1096,7 @@ const CakeCelebration: React.FC = () => {
                     letterSpacing="1"
                     fontFamily="'Dancing Script', cursive"
                   >
-                    Sheoshri 💖
+                    Shreyasi 💖
                   </text>
                 </motion.g>
 
