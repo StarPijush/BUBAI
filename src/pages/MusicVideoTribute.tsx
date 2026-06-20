@@ -34,7 +34,7 @@ const MusicVideoTribute: React.FC = () => {
       <div className="relative z-10 max-w-3xl mx-auto px-4 py-12">
         {/* Header */}
         <motion.div
-          className="text-center mb-10"
+          className="text-center mb-6"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
@@ -114,7 +114,7 @@ const MusicVideoTribute: React.FC = () => {
           </motion.span>
           <p
             className="text-purple-100 font-medium font-inter"
-            style={{ fontSize: '1.1rem', lineHeight: '1.8' }}
+            style={{ fontSize: '1.1rem', lineHeight: '1.6' }}
           >
             {VIDEO_MESSAGE.description}
           </p>

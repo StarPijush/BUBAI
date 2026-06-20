@@ -68,7 +68,7 @@ const CatCompanion: React.FC = () => {
   }
 
   return (
-    <div className="relative flex flex-col items-center mb-16">
+    <div className="relative flex flex-col items-center mb-6">
       {/* Speech Bubble */}
       <AnimatePresence>
         {showSpeech && (
@@ -206,7 +206,7 @@ const BirthdaySurprise: React.FC = () => {
       <AnimatedBackground density="light" emojis={['✨', '🤍', '✨']} />
       <MusicPlayer />
 
-      <div className="relative z-10 max-w-lg mx-auto px-6 py-20 flex flex-col items-center">
+      <div className="relative z-10 max-w-lg mx-auto px-6 py-10 flex flex-col items-center">
         
         {/* ── Main Elegant Heading ── */}
         <motion.div
@@ -246,7 +246,7 @@ const BirthdaySurprise: React.FC = () => {
           variants={containerVariants}
           initial="hidden"
           animate="show"
-          className="text-center w-full flex flex-col gap-10 mb-20"
+          className="text-center w-full flex flex-col gap-5 mb-8"
         >
           <motion.p
             variants={itemVariants}

@@ -50,7 +50,7 @@ const FinalMessage: React.FC = () => {
       <div className="relative z-10 w-full max-w-xl mx-auto px-5 text-center py-12 flex flex-col items-center">
         {/* Elegant Heading */}
         <motion.h1
-          className="mb-10 drop-shadow-sm"
+          className="mb-6 drop-shadow-sm"
           style={{
             fontFamily: "'Dancing Script', cursive",
             fontSize: 'clamp(2.5rem, 8vw, 4rem)',
@@ -70,7 +70,7 @@ const FinalMessage: React.FC = () => {
 
         {/* Handwritten Letter Card */}
         <motion.div
-          className="bg-white/80 backdrop-blur-md rounded-2xl p-8 sm:p-12 w-full border border-pink-100/50"
+          className="bg-white/80 backdrop-blur-md rounded-2xl p-6 sm:p-10 w-full border border-pink-100/50"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.8, ease: 'easeOut' }}
@@ -110,7 +110,7 @@ const FinalMessage: React.FC = () => {
         {/* Clean Premium Replay Button */}
         <motion.button
           onClick={() => navigate('/')}
-          className="mt-12 px-8 py-3.5 bg-gradient-to-r from-pink-400 to-rose-400 text-white text-sm font-bold rounded-full font-inter tracking-wider uppercase transition-all min-h-[48px] flex items-center justify-center"
+          className="mt-8 px-8 py-3.5 bg-gradient-to-r from-pink-400 to-rose-400 text-white text-sm font-bold rounded-full font-inter tracking-wider uppercase transition-all min-h-[48px] flex items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.8, duration: 0.8 }}

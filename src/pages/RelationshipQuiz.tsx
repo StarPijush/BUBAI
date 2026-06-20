@@ -105,7 +105,7 @@ const RelationshipQuiz: React.FC = () => {
         <MusicPlayer />
 
         <motion.div
-          className="relative z-10 glass-card rounded-3xl p-8 max-w-sm mx-4 text-center"
+          className="relative z-10 glass-card rounded-3xl p-5 sm:p-8 max-w-sm mx-4 text-center"
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ type: 'spring', stiffness: 200 }}
@@ -155,7 +155,7 @@ const RelationshipQuiz: React.FC = () => {
 
       <div className="relative z-10 w-full max-w-md mx-4 py-12">
         {/* Header */}
-        <motion.div className="text-center mb-8" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <motion.div className="text-center mb-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           <p className="text-rose-400 text-xs font-inter tracking-widest uppercase mb-2">
             ✦ The Love Quiz ✦
           </p>
@@ -179,7 +179,7 @@ const RelationshipQuiz: React.FC = () => {
         <AnimatePresence mode="wait">
           <motion.div
             key={currentQ}
-            className="glass-card rounded-3xl p-8 text-center mb-6"
+            className="glass-card rounded-3xl p-5 sm:p-8 text-center mb-6"
             initial={{ opacity: 0, x: 60, scale: 0.95 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: -60, scale: 0.95 }}
@@ -195,7 +195,7 @@ const RelationshipQuiz: React.FC = () => {
             </motion.div>
 
             <p
-              className="text-[#4b5563] font-medium font-inter text-xl mb-7 leading-snug"
+              className="text-[#4b5563] font-medium font-inter text-xl mb-5 leading-snug"
               style={{ lineHeight: '1.6' }}
             >
               {question.question}

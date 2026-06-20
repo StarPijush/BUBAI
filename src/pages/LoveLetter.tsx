@@ -41,7 +41,7 @@ const LoveLetter: React.FC = () => {
       <AnimatedBackground density="light" emojis={['💌', '💗', '🌸', '✨', '🦋']} />
       <MusicPlayer />
 
-      <div className="relative z-10 max-w-2xl mx-auto px-4 py-12">
+      <div className="relative z-10 max-w-2xl mx-auto px-4 py-8">
         {/* Page label */}
         <motion.p
           className="text-center text-rose-400 text-xs font-inter tracking-widest uppercase mb-6"
@@ -75,7 +75,7 @@ const LoveLetter: React.FC = () => {
 
           {/* Greeting */}
           <motion.h1
-            className="heading-romantic text-4xl md:text-5xl text-center mb-8"
+            className="heading-romantic text-4xl md:text-5xl text-center mb-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7 }}
@@ -84,12 +84,12 @@ const LoveLetter: React.FC = () => {
           </motion.h1>
 
           {/* Letter body */}
-          <div className="space-y-7">
+          <div className="space-y-4">
             {LETTER.paragraphs.map((para, i) => (
               <motion.p
                 key={i}
                 className="text-[#4b5563] font-medium font-inter"
-                style={{ fontSize: '1.15rem', lineHeight: '1.9' }}
+                style={{ fontSize: '1.15rem', lineHeight: '1.65' }}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8 + i * 0.15, duration: 0.6 }}

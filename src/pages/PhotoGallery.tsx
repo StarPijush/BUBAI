@@ -102,7 +102,7 @@ const PhotoGallery: React.FC = () => {
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-12">
         {/* Header */}
         <motion.div
-          className="text-center mb-10"
+          className="text-center mb-6"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -120,7 +120,7 @@ const PhotoGallery: React.FC = () => {
 
         {/* Photo Grid */}
         <motion.div
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4"
           variants={container}
           initial="hidden"
           animate="show"
