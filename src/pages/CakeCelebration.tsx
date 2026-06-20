@@ -556,7 +556,7 @@ const CakeCelebration: React.FC = () => {
 
   return (
     <div
-      className="page-wrapper min-h-screen flex flex-col items-center justify-start py-8 px-4 overflow-x-hidden touch-none"
+      className="page-wrapper min-h-screen flex flex-col items-center justify-start py-8 px-4 overflow-x-hidden"
       style={{
         background: 'linear-gradient(to bottom, #fff7fb 0%, #ffeef7 50%, #fce7f3 100%)',
       }}

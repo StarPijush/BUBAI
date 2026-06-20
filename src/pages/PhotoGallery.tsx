@@ -9,61 +9,61 @@ import MusicPlayer from '../components/MusicPlayer'
 const PHOTOS = [
   {
     id: 1,
-    src: 'https://placehold.co/400x400/fda4af/ffffff?text=📸+Photo+1',
+    src: '/photos/IMG_5653.JPG',
     caption: 'The day we first met 💕',
     emoji: '💕',
   },
   {
     id: 2,
-    src: 'https://placehold.co/400x400/c084fc/ffffff?text=📸+Photo+2',
+    src: '/photos/IMG_5654.JPG',
     caption: 'Our first adventure together ✈️',
     emoji: '✈️',
   },
   {
     id: 3,
-    src: 'https://placehold.co/400x400/f9a8d4/ffffff?text=📸+Photo+3',
+    src: '/photos/IMG_7762.JPG',
     caption: 'That perfect dinner 🍽️',
     emoji: '🍽️',
   },
   {
     id: 4,
-    src: 'https://placehold.co/400x400/ddd6fe/ffffff?text=📸+Photo+4',
+    src: '/photos/IMG_7770.JPG',
     caption: 'You laughing at my jokes 😂',
     emoji: '😂',
   },
   {
     id: 5,
-    src: 'https://placehold.co/400x400/fda4af/ffffff?text=📸+Photo+5',
+    src: '/photos/IMG_20260620_231935.jpg',
     caption: 'Our cozy movie night 🎬',
     emoji: '🎬',
   },
   {
     id: 6,
-    src: 'https://placehold.co/400x400/c084fc/ffffff?text=📸+Photo+6',
+    src: '/photos/IMG_20260620_231956.jpg',
     caption: 'Surprise flowers for you 🌷',
     emoji: '🌷',
   },
   {
     id: 7,
-    src: 'https://placehold.co/400x400/f9a8d4/ffffff?text=📸+Photo+7',
+    src: '/photos/IMG_20260620_232007.jpg',
     caption: 'That sunset we chased 🌅',
     emoji: '🌅',
   },
   {
     id: 8,
-    src: 'https://placehold.co/400x400/ddd6fe/ffffff?text=📸+Photo+8',
+    src: '/photos/IMG_20260620_232022.jpg',
     caption: 'My favorite person 💖',
     emoji: '💖',
   },
   {
     id: 9,
-    src: 'https://placehold.co/400x400/fda4af/ffffff?text=📸+Photo+9',
+    src: '/photos/IMG_20260620_232039.jpg',
     caption: 'Us being silly together 🤪',
     emoji: '🤪',
   },
   {
     id: 10,
-    src: 'https://placehold.co/400x400/c084fc/ffffff?text=📸+Photo+10',
+    src: '/photos/IMG_20260620_232053.jpg',
     caption: 'Every moment with you ✨',
     emoji: '✨',
   },
@@ -213,9 +213,7 @@ const PhotoGallery: React.FC = () => {
     ? 'opacity-0 pointer-events-none transition-opacity duration-300' 
     : 'opacity-100 transition-opacity duration-300'
 
-  const captionClass = !showUI 
-    ? 'opacity-0 pointer-events-none transition-opacity duration-300' 
-    : 'opacity-100 transition-opacity duration-300'
+
 
   return (
     <div
@@ -279,12 +277,7 @@ const PhotoGallery: React.FC = () => {
                   className="w-full aspect-square object-cover"
                   loading="lazy"
                 />
-                <div className="bg-white/90 px-3 py-2 flex items-center gap-1.5 min-h-[44px] justify-center flex-grow">
-                  <span className="text-base select-none flex-shrink-0">{photo.emoji}</span>
-                  <p className="text-[11px] text-gray-600 font-inter leading-tight text-center">
-                    {photo.caption}
-                  </p>
-                </div>
+
               </div>
             </motion.div>
           ))}
@@ -374,13 +367,7 @@ const PhotoGallery: React.FC = () => {
                       className="max-h-[55vh] max-w-full object-contain rounded-2xl shadow-2xl pointer-events-none"
                     />
                     
-                    {/* Caption: Tighter proximity (mt-4) and fades during Immersive mode */}
-                    <div className={`text-center mt-4 px-4 ${captionClass}`}>
-                      <p className="text-white text-base md:text-lg font-inter font-medium leading-relaxed">
-                        <span className="mr-2 text-xl select-none">{activePhoto.emoji}</span>
-                        {activePhoto.caption}
-                      </p>
-                    </div>
+
                   </motion.div>
                 </AnimatePresence>
               </div>
