@@ -60,7 +60,7 @@ const LoveLetter: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           style={{
             background: 'rgba(255,255,255,0.72)',
-            boxShadow: '0 12px 60px rgba(244,63,94,0.1), 0 4px 20px rgba(192,132,252,0.1)',
+            boxShadow: '0 8px 30px rgba(244, 63, 94, 0.05), 0 2px 10px rgba(192, 132, 252, 0.03)',
           }}
         >
           {/* Decorative top */}

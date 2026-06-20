@@ -132,7 +132,7 @@ const RelationshipQuiz: React.FC = () => {
               : 'Guess we need more dates 😂💕'}
           </p>
           <NavigationButtons
-            prevPath="/reasons"
+            prevPath="/cake"
             nextPath="/tribute"
             nextLabel="Something Special"
             nextEmoji="🎵"
@@ -187,8 +187,9 @@ const RelationshipQuiz: React.FC = () => {
           >
             <motion.div
               className="text-5xl mb-5"
-              animate={{ scale: [1, 1.1, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
+              initial={{ scale: 0.6, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.4, type: 'spring', stiffness: 200 }}
             >
               {question.emoji}
             </motion.div>
@@ -260,23 +261,6 @@ const RelationshipQuiz: React.FC = () => {
             )}
           </motion.div>
         </AnimatePresence>
-
-        {/* Floating stickers */}
-        {STICKERS.slice(0, 4).map((sticker, i) => (
-          <motion.div
-            key={i}
-            className="absolute pointer-events-none select-none text-2xl"
-            style={{
-              top: `${20 + i * 20}%`,
-              left: i % 2 === 0 ? '-20px' : undefined,
-              right: i % 2 !== 0 ? '-20px' : undefined,
-            }}
-            animate={{ y: [0, -12, 0], rotate: [0, 10, -10, 0] }}
-            transition={{ duration: 3 + i, repeat: Infinity, delay: i * 0.5, ease: 'easeInOut' }}
-          >
-            {sticker}
-          </motion.div>
-        ))}
       </div>
     </div>
   )

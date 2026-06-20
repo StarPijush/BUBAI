@@ -29,23 +29,23 @@
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.8);
-    box-shadow: 0 8px 32px rgba(244, 63, 94, 0.12);
+    box-shadow: 0 4px 20px rgba(244, 63, 94, 0.06);
   }
 
   .btn-rose {
-    @apply px-6 py-3 rounded-full font-inter font-medium text-white text-sm tracking-wide;
+    @apply px-6 py-2.5 min-h-[48px] flex items-center justify-center rounded-full font-inter font-medium text-white text-sm tracking-wide;
     background: linear-gradient(135deg, #f43f5e, #c084fc);
-    box-shadow: 0 4px 20px rgba(244, 63, 94, 0.35);
+    box-shadow: 0 4px 12px rgba(244, 63, 94, 0.15);
     transition: all 0.3s ease;
   }
 
   .btn-rose:hover {
-    box-shadow: 0 6px 28px rgba(244, 63, 94, 0.5);
-    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(244, 63, 94, 0.25);
+    transform: translateY(-1px);
   }
 
   .btn-outline {
-    @apply px-6 py-3 rounded-full font-inter font-medium text-sm tracking-wide;
+    @apply px-6 py-2.5 min-h-[48px] flex items-center justify-center rounded-full font-inter font-medium text-sm tracking-wide;
     background: rgba(255, 255, 255, 0.7);
     border: 1.5px solid rgba(244, 63, 94, 0.4);
     color: #f43f5e;

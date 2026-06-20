@@ -129,34 +129,25 @@ const PhotoGallery: React.FC = () => {
             <motion.div
               key={photo.id}
               variants={item}
-              whileHover={{ scale: 1.05, y: -4 }}
-              transition={{ type: 'spring', stiffness: 300 }}
+              whileTap={{ scale: 0.98 }}
               className="group"
             >
               <div
-                className="rounded-2xl overflow-hidden"
+                className="rounded-2xl overflow-hidden bg-white/70"
                 style={{
-                  boxShadow: '0 4px 20px rgba(244,63,94,0.12)',
+                  boxShadow: '0 4px 12px rgba(244,63,94,0.05)',
                   border: '2px solid rgba(255,255,255,0.8)',
                 }}
               >
-                <div className="relative">
-                  <img
-                    src={photo.src}
-                    alt={photo.caption}
-                    className="w-full aspect-square object-cover"
-                    loading="lazy"
-                  />
-                  {/* Overlay on hover */}
-                  <div
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-                    style={{ background: 'rgba(244,63,94,0.15)' }}
-                  >
-                    <span className="text-3xl">{photo.emoji}</span>
-                  </div>
-                </div>
-                <div className="bg-white/80 px-3 py-2">
-                  <p className="text-xs text-gray-600 font-inter text-center leading-tight">
+                <img
+                  src={photo.src}
+                  alt={photo.caption}
+                  className="w-full aspect-square object-cover"
+                  loading="lazy"
+                />
+                <div className="bg-white/90 px-3 py-2 flex items-center gap-1.5 min-h-[44px] justify-center">
+                  <span className="text-base select-none flex-shrink-0">{photo.emoji}</span>
+                  <p className="text-[11px] text-gray-600 font-inter leading-tight text-center">
                     {photo.caption}
                   </p>
                 </div>

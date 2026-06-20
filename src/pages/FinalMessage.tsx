@@ -32,30 +32,19 @@ const FinalMessage: React.FC = () => {
     >
       <MusicPlayer />
 
-      {/* Very Subtle Background Elements */}
+      {/* Very Subtle Background Elements (Static for zero mobile GPU overhead) */}
       {AMBIENT_ITEMS.map((item) => (
-        <motion.div
+        <div
           key={item.id}
-          className="absolute select-none pointer-events-none opacity-40"
+          className="absolute select-none pointer-events-none opacity-[0.16]"
           style={{
             left: `${item.x}%`,
             top: `${item.y}%`,
             fontSize: `${item.size}px`,
-            filter: 'blur(0.5px)',
-          }}
-          animate={{
-            y: [0, -10, 0],
-            opacity: [0.2, 0.5, 0.2],
-          }}
-          transition={{
-            duration: 4 + Math.random() * 2,
-            repeat: Infinity,
-            delay: item.delay,
-            ease: 'easeInOut',
           }}
         >
           {item.emoji}
-        </motion.div>
+        </div>
       ))}
 
       <div className="relative z-10 w-full max-w-xl mx-auto px-5 text-center py-12 flex flex-col items-center">
@@ -111,13 +100,9 @@ const FinalMessage: React.FC = () => {
               style={{ fontFamily: "'Dancing Script', cursive", fontSize: '1.8rem' }}
             >
               Forever Yours?
-              <motion.span
-                className="inline-block origin-center"
-                animate={{ scale: [1, 1.15, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-              >
+              <span className="inline-block origin-center select-none">
                 ❤️
-              </motion.span>
+              </span>
             </div>
           </motion.div>
         </motion.div>
@@ -125,14 +110,14 @@ const FinalMessage: React.FC = () => {
         {/* Clean Premium Replay Button */}
         <motion.button
           onClick={() => navigate('/')}
-          className="mt-12 px-8 py-3.5 bg-gradient-to-r from-pink-400 to-rose-400 text-white text-sm font-bold rounded-full font-inter tracking-wider uppercase transition-all"
+          className="mt-12 px-8 py-3.5 bg-gradient-to-r from-pink-400 to-rose-400 text-white text-sm font-bold rounded-full font-inter tracking-wider uppercase transition-all min-h-[48px] flex items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.8, duration: 0.8 }}
-          whileHover={{ scale: 1.05, boxShadow: '0 8px 25px rgba(244, 63, 94, 0.3)' }}
+          whileHover={{ scale: 1.05, boxShadow: '0 6px 18px rgba(244, 63, 94, 0.2)' }}
           whileTap={{ scale: 0.96 }}
           style={{
-            boxShadow: '0 4px 15px rgba(244, 63, 94, 0.2)',
+            boxShadow: '0 4px 12px rgba(244, 63, 94, 0.15)',
           }}
         >
           Replay the Journey

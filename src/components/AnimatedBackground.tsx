@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react'
-import { motion } from 'framer-motion'
 
 interface FloatingHeart {
   id: number
@@ -9,6 +8,7 @@ interface FloatingHeart {
   delay: number
   emoji: string
   opacity: number
+  sway: number
 }
 
 interface AnimatedBackgroundProps {
@@ -18,61 +18,64 @@ interface AnimatedBackgroundProps {
 
 const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({
   density = 'medium',
-  emojis = ['💗', '💕', '🌸', '✨', '💖', '🌷', '💝'],
+  emojis = ['💗', '💕', '🌸', '✨', '💖', '💝'],
 }) => {
-  const count = density === 'light' ? 8 : density === 'medium' ? 14 : 22
+  // Drastically reduced counts to optimize GPU/CPU rendering and remove visual clutter
+  const count = density === 'light' ? 3 : density === 'medium' ? 5 : 8
 
   const hearts: FloatingHeart[] = useMemo(
     () =>
       Array.from({ length: count }, (_, i) => ({
         id: i,
-        x: Math.random() * 100,
-        size: Math.random() * 20 + 16,
-        duration: Math.random() * 8 + 6,
-        delay: Math.random() * 5,
-        emoji: emojis[Math.floor(Math.random() * emojis.length)],
-        opacity: Math.random() * 0.35 + 0.1,
+        x: Math.random() * 90 + 5, // Keep slightly inset from screen edges
+        size: Math.random() * 12 + 14, // Subtle sizes (14px - 26px)
+        duration: Math.random() * 12 + 18, // Very slow movement (18s to 30s)
+        delay: Math.random() * -20, // Negative delay so particles are immediately spread across screen height on mount
+        emoji: emojis[i % emojis.length],
+        opacity: Math.random() * 0.15 + 0.08, // Very soft opacity (8% - 23%)
+        sway: Math.random() * 20 - 10, // Horizontal sway distance in vw
       })),
     [count, emojis]
   )
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
+      <style>{`
+        @keyframes float-up-ambient {
+          0% {
+            transform: translateY(105vh) translateX(0px) rotate(0deg);
+          }
+          50% {
+            transform: translateY(45vh) translateX(var(--sway-x)) rotate(var(--rotate-mid));
+          }
+          100% {
+            transform: translateY(-10vh) translateX(0px) rotate(var(--rotate-end));
+          }
+        }
+        .ambient-particle {
+          animation: float-up-ambient var(--dur) linear infinite;
+          animation-delay: var(--delay);
+          will-change: transform;
+        }
+      `}</style>
       {hearts.map((heart) => (
-        <motion.div
+        <div
           key={heart.id}
-          className="absolute select-none"
+          className="absolute ambient-particle select-none"
           style={{
             left: `${heart.x}%`,
             fontSize: `${heart.size}px`,
             opacity: heart.opacity,
-            filter: 'blur(0.5px)',
-          }}
-          initial={{ y: '110vh', rotate: 0 }}
-          animate={{
-            y: '-10vh',
-            rotate: [0, 15, -10, 20, -5, 0],
-            x: [0, 20, -15, 25, -10, 0],
-          }}
-          transition={{
-            duration: heart.duration,
-            delay: heart.delay,
-            repeat: Infinity,
-            ease: 'linear',
-            x: {
-              duration: heart.duration,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            },
-            rotate: {
-              duration: heart.duration * 0.7,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            },
+            // Inline custom CSS variables to feed values to the static keyframe animation
+            ['--dur' as any]: `${heart.duration}s`,
+            ['--delay' as any]: `${heart.delay}s`,
+            ['--sway-x' as any]: `${heart.sway}vw`,
+            ['--rotate-mid' as any]: `${heart.sway * 1.5}deg`,
+            ['--rotate-end' as any]: `${heart.sway * 3}deg`,
           }}
         >
           {heart.emoji}
-        </motion.div>
+        </div>
       ))}
     </div>
   )

@@ -205,7 +205,7 @@ const LoginPage: React.FC = () => {
       >
         {/* Glowing card */}
         <motion.div
-          className="glass-card rounded-3xl p-8 text-center"
+          className="glass-card rounded-3xl p-6 sm:p-8 text-center"
           animate={shake ? { x: [-8, 8, -6, 6, -3, 3, 0] } : {}}
           transition={{ duration: 0.5 }}
         >
@@ -214,13 +214,13 @@ const LoginPage: React.FC = () => {
             className="mx-auto mb-4 flex items-center justify-center"
             animate={
               catState === 'idle'
-                ? { y: [0, -6, 0], rotate: [0, 2, -2, 0] }
+                ? { y: [0, -2, 0], rotate: [0, 0.5, -0.5, 0] }
                 : catState === 'crying'
                   ? { y: [0, 2, 0], rotate: [0, -3, 3, -3, 0] }
                   : { y: [0, -12, 0], scale: [1, 1.15, 1], rotate: [0, 5, -5, 5, 0] }
             }
             transition={{
-              duration: catState === 'happy' ? 0.6 : catState === 'crying' ? 0.8 : 2.5,
+              duration: catState === 'happy' ? 0.6 : catState === 'crying' ? 0.8 : 6.0,
               repeat: Infinity,
               ease: 'easeInOut',
             }}
@@ -308,7 +308,7 @@ const LoginPage: React.FC = () => {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKey}
             placeholder="Type your answer..."
-            className="w-full px-4 py-3 rounded-2xl text-center text-sm font-inter outline-none mb-4"
+            className="w-full px-4 py-3 min-h-[48px] rounded-2xl text-center text-sm font-inter outline-none mb-4"
             style={{
               background: 'rgba(255,255,255,0.9)',
               border: error ? '1.5px solid #f43f5e' : '1.5px solid rgba(244,63,94,0.25)',
@@ -369,32 +369,6 @@ const LoginPage: React.FC = () => {
             psst... you know what it is 🤫
           </p>
         </motion.div>
-
-        {/* Floating hearts decoration */}
-        {['💕', '✨', '🌸'].map((emoji, i) => (
-          <motion.div
-            key={i}
-            className="absolute pointer-events-none select-none text-2xl"
-            style={{
-              top: i === 0 ? '-20px' : i === 1 ? '30%' : undefined,
-              bottom: i === 2 ? '-20px' : undefined,
-              left: i === 1 ? '-30px' : undefined,
-              right: i === 0 ? '10px' : i === 2 ? '20px' : undefined,
-            }}
-            animate={{
-              y: [0, -10, 0],
-              rotate: [0, 10, -10, 0],
-            }}
-            transition={{
-              duration: 3 + i,
-              repeat: Infinity,
-              delay: i * 0.7,
-              ease: 'easeInOut',
-            }}
-          >
-            {emoji}
-          </motion.div>
-        ))}
       </motion.div>
     </div>
   )

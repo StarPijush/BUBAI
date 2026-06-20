@@ -23,7 +23,7 @@ const CRUMB_COLORS = ['#ffccd5', '#ffb3c1', '#ff8fa3', '#fff0f3', '#ffdca3', '#f
 // ── Ambient Particles Component ──
 const AmbientDust: React.FC = React.memo(() => {
   const particles = React.useMemo(() => {
-    return Array.from({ length: 15 }, (_, i) => ({
+    return Array.from({ length: 4 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: 20 + Math.random() * 70,
@@ -35,27 +35,40 @@ const AmbientDust: React.FC = React.memo(() => {
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
+      <style>{`
+        @keyframes dust-float {
+          0% {
+            transform: translateY(20vh) translateX(0px);
+            opacity: 0;
+          }
+          20% {
+            opacity: 0.4;
+          }
+          80% {
+            opacity: 0.4;
+          }
+          100% {
+            transform: translateY(-80vh) translateX(15px);
+            opacity: 0;
+          }
+        }
+        .dust-particle {
+          animation: dust-float var(--dur) linear infinite;
+          animation-delay: var(--delay);
+          will-change: transform;
+        }
+      `}</style>
       {particles.map((p) => (
-        <motion.div
+        <div
           key={p.id}
-          className="absolute rounded-full bg-white/40"
+          className="absolute rounded-full bg-white/30 dust-particle"
           style={{
             left: `${p.x}%`,
             top: `${p.y}%`,
             width: p.size,
             height: p.size,
-            filter: 'blur(0.5px)',
-          }}
-          animate={{
-            y: ['0vh', '-100vh'],
-            x: ['0vw', `${(Math.random() - 0.5) * 10}vw`],
-            opacity: [0, 0.6, 0],
-          }}
-          transition={{
-            duration: p.duration,
-            delay: p.delay,
-            repeat: Infinity,
-            ease: 'linear',
+            ['--dur' as any]: `${p.duration}s`,
+            ['--delay' as any]: `${p.delay}s`,
           }}
         />
       ))}
@@ -66,43 +79,51 @@ const AmbientDust: React.FC = React.memo(() => {
 // ── Tiny Sparkles Component ──
 const AmbientSparkles: React.FC = React.memo(() => {
   const sparkles = React.useMemo(() => {
-    return Array.from({ length: 8 }, (_, i) => ({
+    return Array.from({ length: 2 }, (_, i) => ({
       id: i,
       x: 10 + Math.random() * 80,
       y: 30 + Math.random() * 50,
       size: Math.random() * 6 + 4,
       delay: Math.random() * 5,
-      duration: 3 + Math.random() * 3,
+      duration: 4 + Math.random() * 3,
     }))
   }, [])
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
+      <style>{`
+        @keyframes sparkle-pulse {
+          0%, 100% {
+            transform: scale(0) rotate(0deg);
+            opacity: 0;
+          }
+          50% {
+            transform: scale(1) rotate(90deg);
+            opacity: 0.5;
+          }
+        }
+        .sparkle-particle {
+          animation: sparkle-pulse var(--dur) ease-in-out infinite;
+          animation-delay: var(--delay);
+          will-change: transform;
+        }
+      `}</style>
       {sparkles.map((s) => (
-        <motion.svg
+        <svg
           key={s.id}
-          className="absolute text-pink-300/60 fill-current"
+          className="absolute text-pink-300/40 fill-current sparkle-particle"
           style={{
             left: `${s.x}%`,
             top: `${s.y}%`,
             width: s.size,
             height: s.size,
+            ['--dur' as any]: `${s.duration}s`,
+            ['--delay' as any]: `${s.delay}s`,
           }}
           viewBox="0 0 24 24"
-          animate={{
-            scale: [0, 1, 0],
-            rotate: [0, 90, 180],
-            opacity: [0, 0.8, 0],
-          }}
-          transition={{
-            duration: s.duration,
-            delay: s.delay,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
         >
           <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.6L12 0Z" />
-        </motion.svg>
+        </svg>
       ))}
     </div>
   )
@@ -330,8 +351,8 @@ const CakeCelebration: React.FC = () => {
       const pos = candlePositions[index]
 
       // Spawn blow sparkles
-      const newSparkles: Particle[] = Array.from({ length: 8 }).map((_, i) => {
-        const angle = (i * 360) / 8 + Math.random() * 15
+      const newSparkles: Particle[] = Array.from({ length: 3 }).map((_, i) => {
+        const angle = (i * 360) / 3 + Math.random() * 15
         const speed = 2 + Math.random() * 3
         return {
           id: particleId.current++,
@@ -357,7 +378,7 @@ const CakeCelebration: React.FC = () => {
         })
 
         // Spawn smoke particles
-        const newSmoke: Particle[] = Array.from({ length: 5 }).map((_) => ({
+        const newSmoke: Particle[] = Array.from({ length: 2 }).map((_) => ({
           id: particleId.current++,
           x: pos.x + (Math.random() * 6 - 3),
           y: pos.y - 10,
@@ -420,22 +441,27 @@ const CakeCelebration: React.FC = () => {
         const dy = y - lastPointRef.current.y
         const dist = Math.sqrt(dx * dx + dy * dy)
 
-        // Track vertical cutting progress down the middle (x around 250)
-        // Check if cursor is near the vertical center line
-        const centerDist = Math.abs(x - 250)
+        // Convert client pixels to SVG viewBox space coordinates (0 to 500)
+        const svgX = (x / rect.width) * 500
+        const svgY = (y / rect.height) * 500
+        const svgLastY = (lastPointRef.current.y / rect.height) * 500
+        const svgDy = svgY - svgLastY
 
-        // If swipe is within center margin and moving down
-        if (centerDist < 60 && dy > 0 && dist > 4) {
+        // Track vertical cutting progress down the middle (x around 250 in viewBox units)
+        const centerDist = Math.abs(svgX - 250)
+
+        // If swipe is within center margin and moving down (widened to 90 units for thumb ease)
+        if (centerDist < 90 && svgDy > 0 && dist > 3) {
           setProgress((prev) => {
-            // Map cutting region from y=120 to y=380 (height 260px)
-            const deltaProgress = (dy / 260) * 100
+            // Map cutting region from y=120 to y=380 (height 260 units in viewBox)
+            const deltaProgress = (svgDy / 260) * 100
             const nextProg = Math.min(prev + deltaProgress, 100)
 
-            // Spawn frosting splashes/crumbs
-            if (Math.random() > 0.6) {
+            // Spawn frosting splashes/crumbs (reduced density)
+            if (Math.random() > 0.8) {
               const color = CRUMB_COLORS[Math.floor(Math.random() * CRUMB_COLORS.length)]
               setFrostingSplashes((prevSplashes) => [
-                ...prevSplashes.slice(-25),
+                ...prevSplashes.slice(-8),
                 {
                   id: particleId.current++,
                   x,
@@ -448,10 +474,10 @@ const CakeCelebration: React.FC = () => {
               triggerVibrate([15])
             }
 
-            // Spawn floating hearts
-            if (Math.random() > 0.9) {
+            // Spawn floating hearts (reduced density)
+            if (Math.random() > 0.95) {
               setFloatingHearts((prevHearts) => [
-                ...prevHearts.slice(-10),
+                ...prevHearts.slice(-3),
                 {
                   id: particleId.current++,
                   x,
@@ -489,8 +515,8 @@ const CakeCelebration: React.FC = () => {
     setStep('celebration')
     triggerVibrate([100, 50, 100, 50, 200])
 
-    // Generate burst confetti
-    const newConfetti: Particle[] = Array.from({ length: 45 }).map((_, i) => ({
+    // Generate burst confetti (reduced count for smooth mobile performance)
+    const newConfetti: Particle[] = Array.from({ length: 15 }).map((_, i) => ({
       id: i,
       x: 250 + (Math.random() * 20 - 10),
       y: 280 + (Math.random() * 20 - 10),
@@ -741,9 +767,9 @@ const CakeCelebration: React.FC = () => {
                 className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 z-20 pointer-events-none"
               >
                 <div
-                  className="px-6 py-5 rounded-3xl border border-pink-200/40 bg-white/75 backdrop-blur-md shadow-lg max-w-[280px]"
+                  className="px-6 py-5 rounded-3xl border border-pink-200/40 bg-white/75 backdrop-blur-md shadow-md max-w-[280px]"
                   style={{
-                    boxShadow: '0 12px 32px rgba(244, 63, 94, 0.08)',
+                    boxShadow: '0 6px 18px rgba(244, 63, 94, 0.04)',
                   }}
                 >
                   <p
@@ -818,7 +844,7 @@ const CakeCelebration: React.FC = () => {
                     <stop offset="100%" stopColor="#fbbf24" stopOpacity="0" />
                   </radialGradient>
                   <filter id="shadowFilter">
-                    <feDropShadow dx="0" dy="8" stdDeviation="12" floodColor="#db2777" floodOpacity="0.12" />
+                    <feDropShadow dx="0" dy="5" stdDeviation="6" floodColor="#db2777" floodOpacity="0.06" />
                   </filter>
 
                   {/* Left & Right Clips for perfect split */}
@@ -1336,7 +1362,7 @@ const CakeCelebration: React.FC = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   style={{
-                    boxShadow: '0 8px 30px rgba(244, 63, 94, 0.3)',
+                    boxShadow: '0 4px 12px rgba(244, 63, 94, 0.15)',
                   }}
                 >
                   Open It 💌

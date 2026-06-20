@@ -77,7 +77,7 @@ const CatCompanion: React.FC = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.9 }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
-            className="absolute -top-14 bg-white/80 backdrop-blur-md px-5 py-2 rounded-2xl shadow-[0_4px_20px_rgba(219,39,119,0.1)] border border-pink-100/50 text-pink-600 text-sm font-inter tracking-wide whitespace-nowrap z-20"
+            className="absolute -top-14 bg-white/80 backdrop-blur-md px-5 py-2 rounded-2xl shadow-[0_4px_12px_rgba(219,39,119,0.05)] border border-pink-100/50 text-pink-600 text-sm font-inter tracking-wide whitespace-nowrap z-20"
             style={{ fontFamily: "'Dancing Script', cursive", fontSize: '1.2rem' }}
           >
             Look what Bubu made for you ✨
@@ -106,9 +106,9 @@ const CatCompanion: React.FC = () => {
       <motion.div
         className="cursor-pointer"
         onClick={handleTap}
-        // Slow, gentle breathing/floating
-        animate={{ y: [0, -4, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+        // Slow, gentle breathing/floating (optimized for mobile)
+        animate={{ y: [0, -2, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
         whileTap={{ scale: 0.95 }}
       >
         <svg viewBox="0 0 200 200" width="140" height="140" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-lg">
@@ -224,7 +224,7 @@ const BirthdaySurprise: React.FC = () => {
             style={{
               fontFamily: "'Dancing Script', cursive",
               color: '#db2777', // Deep, elegant rose (tailwind pink-600)
-              textShadow: '0 4px 20px rgba(219, 39, 119, 0.15)',
+              textShadow: '0 2px 10px rgba(219, 39, 119, 0.08)',
             }}
           >
             Happy Birthday<br />
@@ -301,15 +301,15 @@ const BirthdaySurprise: React.FC = () => {
         >
           <motion.button
             onClick={() => navigate('/cake')}
-            className="px-12 py-4 rounded-full font-inter text-white text-sm sm:text-base tracking-[0.15em] uppercase"
+            className="px-12 py-4 rounded-full font-inter text-white text-sm sm:text-base tracking-[0.15em] uppercase min-h-[48px] flex items-center justify-center"
             style={{
               background: 'linear-gradient(135deg, #db2777, #c084fc)',
-              boxShadow: '0 10px 40px -10px rgba(219, 39, 119, 0.4)',
+              boxShadow: '0 6px 20px -6px rgba(219, 39, 119, 0.18)',
               border: '1px solid rgba(255, 255, 255, 0.2)',
             }}
             whileHover={{
               scale: 1.02,
-              boxShadow: '0 15px 50px -10px rgba(219, 39, 119, 0.5)',
+              boxShadow: '0 8px 24px -4px rgba(219, 39, 119, 0.25)',
               background: 'linear-gradient(135deg, #e11d48, #d8b4fe)',
             }}
             whileTap={{ scale: 0.98 }}

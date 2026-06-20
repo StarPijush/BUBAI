@@ -66,7 +66,7 @@ const MusicVideoTribute: React.FC = () => {
           style={{
             borderRadius: '1.5rem',
             overflow: 'hidden',
-            boxShadow: '0 20px 80px rgba(244,63,94,0.25), 0 0 40px rgba(192,132,252,0.15)',
+            boxShadow: '0 10px 30px rgba(244,63,94,0.08), 0 2px 10px rgba(192,132,252,0.04)',
           }}
         >
           {/* Glow border */}
@@ -106,8 +106,9 @@ const MusicVideoTribute: React.FC = () => {
         >
           <motion.span
             className="text-4xl block mb-4"
-            animate={{ scale: [1, 1.1, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.5, type: 'spring' }}
           >
             🎵
           </motion.span>
