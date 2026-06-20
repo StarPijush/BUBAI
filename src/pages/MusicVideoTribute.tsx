@@ -1,24 +1,60 @@
-import React from 'react'
-import { motion } from 'framer-motion'
+import React, { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import AnimatedBackground from '../components/AnimatedBackground'
 import NavigationButtons from '../components/NavigationButtons'
 import MusicPlayer from '../components/MusicPlayer'
+import { useMusic } from '../context/MusicContext'
 
-// ── 🎵 CUSTOMIZE: Replace with your YouTube video ID ──
-// Find it in the YouTube URL: youtube.com/watch?v=VIDEO_ID_HERE
-// Example: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" → VIDEO_ID = "dQw4w9WgXcQ"
-const YOUTUBE_VIDEO_ID = 'dQw4w9WgXcQ' // ← Replace this!
+// ── 💌 CUSTOMIZE: Edit the personal note below ──
+const PERSONAL_NOTE = {
+  title: 'For Sheoshri ❤️',
+  body: `This isn't a perfect video.
 
-// ── 💌 CUSTOMIZE: Your video message ──
-const VIDEO_MESSAGE = {
-  title: 'A Song That Makes Me Think Of You',
-  subtitle: 'Every time I hear this, I think of your smile 💕',
-  // Replace with your own message
-  description:
-    'This song found its way to me at exactly the right time — because it says everything I struggle to say out loud. Every lyric feels like it was written for us. I hope whenever you hear it, you think of me thinking of you.',
+I might smile too much.
+I might get nervous.
+I might forget what I wanted to say.
+
+But every word comes from my heart.
+
+And every second of this message is just for you.`,
 }
 
+// ── 🎨 CUSTOMIZE: Video poster image ──
+// Add a path to a poster image (e.g. '/videos/poster.jpg') if you want one to show before playing
+const VIDEO_POSTER = ''
+
 const MusicVideoTribute: React.FC = () => {
+  const [isVideoFinished, setIsVideoFinished] = useState(false)
+  const [isVideoLoading, setIsVideoLoading] = useState(true)
+  const { isPlaying, toggleMusic, startMusic } = useMusic()
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const handleVideoPlay = () => {
+    setIsVideoFinished(false)
+    if (isPlaying) {
+      toggleMusic()
+    }
+  }
+
+  const handleVideoEnded = () => {
+    setIsVideoFinished(true)
+    if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    // Wait 2 seconds, then resume background music with a smooth fade-in
+    timeoutRef.current = setTimeout(() => {
+      startMusic()
+    }, 2000)
+  }
+
+  const handleVideoLoaded = () => {
+    setIsVideoLoading(false)
+  }
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    }
+  }, [])
+
   return (
     <div
       className="page-wrapper"
@@ -27,23 +63,23 @@ const MusicVideoTribute: React.FC = () => {
         minHeight: '100vh',
       }}
     >
-      {/* Dark starfield background */}
-      <AnimatedBackground density="heavy" emojis={['⭐', '✨', '💫', '🌟', '💕']} />
+      {/* Light ambient background: Max 2 hearts and 2 sparkles (3 particles total) */}
+      <AnimatedBackground density="light" emojis={['❤️', '✨']} />
       <MusicPlayer />
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 py-12">
         {/* Header */}
         <motion.div
-          className="text-center mb-6"
+          className="text-center mb-8"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
         >
-          <p className="text-purple-400 text-xs font-inter tracking-widest uppercase mb-3">
-            ✦ For You ✦
+          <p className="text-purple-400 text-xs font-semibold tracking-widest uppercase mb-3">
+            ✦ JUST FOR YOU ✦
           </p>
           <h1
-            className="text-4xl md:text-5xl mb-3"
+            className="text-4xl md:text-5xl mb-4 px-2 font-bold"
             style={{
               fontFamily: "'Dancing Script', cursive",
               background: 'linear-gradient(135deg, #fda4af, #c084fc, #818cf8)',
@@ -52,79 +88,123 @@ const MusicVideoTribute: React.FC = () => {
               backgroundClip: 'text',
             }}
           >
-            {VIDEO_MESSAGE.title}
+            A Little Message From Bubu ❤️
           </h1>
-          <p className="text-purple-300 text-sm font-inter">{VIDEO_MESSAGE.subtitle}</p>
-        </motion.div>
-
-        {/* YouTube embed */}
-        <motion.div
-          className="relative w-full mb-8"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
-          style={{
-            borderRadius: '1.5rem',
-            overflow: 'hidden',
-            boxShadow: '0 10px 30px rgba(244,63,94,0.08), 0 2px 10px rgba(192,132,252,0.04)',
-          }}
-        >
-          {/* Glow border */}
-          <div
-            className="absolute inset-0 rounded-3xl pointer-events-none z-10"
-            style={{
-              border: '1.5px solid rgba(253,164,175,0.3)',
-              borderRadius: '1.5rem',
-            }}
-          />
-          <div
-            className="relative w-full"
-            style={{ paddingBottom: '56.25%' /* 16:9 ratio */ }}
-          >
-            <iframe
-              src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?rel=0&modestbranding=1`}
-              title="A song for you"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="absolute inset-0 w-full h-full"
-              style={{ borderRadius: '1.5rem' }}
-            />
-          </div>
-        </motion.div>
-
-        {/* Message card */}
-        <motion.div
-          className="rounded-3xl p-7 text-center"
-          style={{
-            background: 'rgba(255,255,255,0.06)',
-            border: '1px solid rgba(253,164,175,0.2)',
-            backdropFilter: 'blur(12px)',
-          }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-        >
-          <motion.span
-            className="text-4xl block mb-4"
-            initial={{ scale: 0.8 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.5, type: 'spring' }}
-          >
-            🎵
-          </motion.span>
-          <p
-            className="text-purple-100 font-medium font-inter"
-            style={{ fontSize: '1.1rem', lineHeight: '1.6' }}
-          >
-            {VIDEO_MESSAGE.description}
+          <p className="text-purple-300 text-sm md:text-base font-inter max-w-md mx-auto leading-relaxed px-4">
+            Before we continue...
+            <br />
+            there's something I wanted to tell you.
           </p>
         </motion.div>
 
-        {/* Navigation */}
+        {/* Video Player Card */}
+        <motion.div
+          className="relative w-full mx-auto mb-8 rounded-2xl overflow-hidden shadow-2xl transition-all duration-500"
+          style={{
+            maxWidth: '800px',
+            background: 'rgba(255, 255, 255, 0.03)',
+            border: '1px solid rgba(253, 164, 175, 0.15)',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
+            minHeight: isVideoLoading ? '320px' : 'auto',
+          }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.8, ease: 'easeOut' }}
+        >
+          <video
+            src="/videos/VID-20260620-WA0000.mp4"
+            controls
+            playsInline
+            poster={VIDEO_POSTER || undefined}
+            className="w-full max-h-[70vh] object-contain block mx-auto rounded-2xl"
+            onPlay={handleVideoPlay}
+            onEnded={handleVideoEnded}
+            onLoadedData={handleVideoLoaded}
+            onError={handleVideoLoaded}
+          />
+
+          {/* Premium Loading Overlay */}
+          <AnimatePresence>
+            {isVideoLoading && (
+              <motion.div
+                className="absolute inset-0 flex flex-col items-center justify-center bg-[#120822]/95 z-20"
+                initial={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5, ease: 'easeInOut' }}
+              >
+                <motion.div
+                  animate={{ scale: [1, 1.08, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                  className="text-4xl mb-3 select-none"
+                >
+                  💌
+                </motion.div>
+                <p className="text-purple-300 text-sm font-inter font-medium tracking-wide">
+                  Loading your message...
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+
+        {/* Special Touch: Thank you message */}
+        <AnimatePresence>
+          {isVideoFinished && (
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.0, ease: 'easeOut' }}
+              className="text-center mt-2 mb-8"
+            >
+              <div
+                className="inline-block py-2.5 px-6 rounded-full"
+                style={{
+                  background: 'rgba(244, 63, 94, 0.08)',
+                  border: '1px solid rgba(244, 63, 94, 0.15)',
+                  boxShadow: '0 4px 15px rgba(244, 63, 94, 0.05)',
+                }}
+              >
+                <span className="text-rose-300 font-medium text-sm md:text-base tracking-wide font-inter">
+                  Thank you for listening to me ❤️
+                </span>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Personal Note Card */}
+        <motion.div
+          className="rounded-3xl p-6 md:p-8 text-center mb-8"
+          style={{
+            background: 'rgba(255, 255, 255, 0.05)',
+            border: '1px solid rgba(253, 164, 175, 0.15)',
+            backdropFilter: 'blur(12px)',
+            boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.2)',
+          }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.8, ease: 'easeOut' }}
+        >
+          <h2
+            className="text-2xl md:text-3xl mb-4 text-rose-300 font-bold"
+            style={{ fontFamily: "'Dancing Script', cursive" }}
+          >
+            {PERSONAL_NOTE.title}
+          </h2>
+          <p
+            className="text-purple-100 font-medium font-inter whitespace-pre-line text-sm md:text-base"
+            style={{ lineHeight: '1.75' }}
+          >
+            {PERSONAL_NOTE.body}
+          </p>
+        </motion.div>
+
+        {/* Navigation Buttons */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
+          transition={{ delay: 0.9 }}
         >
           <NavigationButtons
             prevPath="/quiz"
