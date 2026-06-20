@@ -207,7 +207,7 @@ const MusicVideoTribute: React.FC = () => {
           transition={{ delay: 0.9 }}
         >
           <NavigationButtons
-            prevPath="/quiz"
+            prevPath="/reasons"
             nextPath="/final"
             nextLabel="The Grand Finale"
             nextEmoji="🎂"

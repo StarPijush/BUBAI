@@ -125,9 +125,9 @@ const ReasonsILoveYou: React.FC = () => {
         {/* Navigation */}
         <NavigationButtons
           prevPath="/cake"
-          nextPath="/quiz"
-          nextLabel="Take the Quiz"
-          nextEmoji="🎯"
+          nextPath="/tribute"
+          nextLabel="A Special Message"
+          nextEmoji="💌"
         />
       </div>
     </div>
