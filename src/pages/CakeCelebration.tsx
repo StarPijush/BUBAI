@@ -1357,7 +1357,7 @@ const CakeCelebration: React.FC = () => {
 
                 {/* Continue button */}
                 <motion.button
-                  onClick={() => navigate('/reasons')}
+                  onClick={() => navigate('/tribute')}
                   className="btn-rose flex items-center justify-center gap-2 px-10 py-4 text-base font-bold rounded-full font-inter tracking-wider uppercase"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
