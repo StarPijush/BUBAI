@@ -9,7 +9,7 @@ import PhotoGallery from './pages/PhotoGallery'
 import BirthdaySurprise from './pages/BirthdaySurprise'
 import CakeCelebration from './pages/CakeCelebration'
 import ReasonsILoveYou from './pages/ReasonsILoveYou'
-import RelationshipQuiz from './pages/RelationshipQuiz'
+// import RelationshipQuiz from './pages/RelationshipQuiz'
 import MusicVideoTribute from './pages/MusicVideoTribute'
 import FinalMessage from './pages/FinalMessage'
 
@@ -27,7 +27,8 @@ const App: React.FC = () => {
           <Route path="/timeline" element={<BirthdaySurprise />} />
           <Route path="/cake" element={<CakeCelebration />} />
           <Route path="/reasons" element={<ReasonsILoveYou />} />
-          <Route path="/quiz" element={<RelationshipQuiz />} />
+          {/* Relationship quiz skipped */}
+          <Route path="/quiz" element={<Navigate to="/tribute" replace />} />
           <Route path="/tribute" element={<MusicVideoTribute />} />
           <Route path="/final" element={<FinalMessage />} />
 
