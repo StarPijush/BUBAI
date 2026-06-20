@@ -789,7 +789,7 @@ const CakeCelebration: React.FC = () => {
             animate={cakeJiggle ? { rotate: [-1.5, 1.5, -1, 1, 0], scale: [1, 1.02, 0.98, 1] } : {}}
             transition={{ duration: 0.4 }}
             style={{ width: '75%', maxWidth: '320px' }}
-            className="relative z-10 flex justify-center items-center touch-none select-none"
+            className={`relative z-10 flex justify-center items-center select-none ${step === 'cutting' ? 'touch-none' : ''}`}
           >
             <div
               ref={containerRef}
@@ -1357,7 +1357,7 @@ const CakeCelebration: React.FC = () => {
 
                 {/* Continue button */}
                 <motion.button
-                  onClick={() => navigate('/quiz')} // TEMPORARILY SKIPPED // Will be redesigned later.
+                  onClick={() => navigate('/reasons')}
                   className="btn-rose flex items-center justify-center gap-2 px-10 py-4 text-base font-bold rounded-full font-inter tracking-wider uppercase"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
