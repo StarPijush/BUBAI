@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 import AnimatedBackground from '../components/AnimatedBackground'
@@ -6,11 +6,6 @@ import NavigationButtons from '../components/NavigationButtons'
 import MusicPlayer from '../components/MusicPlayer'
 
 // ── 📸 CUSTOMIZE: Replace these with your actual photos ──
-// To add photos:
-//   1. Place image files in /public/photos/ (e.g. /public/photos/photo1.jpg)
-//   2. Replace the 'src' value with the path (e.g. '/photos/photo1.jpg')
-//   3. Update the 'caption' for each photo
-//   4. Add or remove entries as needed
 const PHOTOS = [
   {
     id: 1,
@@ -90,28 +85,23 @@ const item = {
 
 const slideVariants = {
   enter: (direction: number) => ({
-    x: direction > 0 ? 300 : -300,
+    x: direction > 0 ? '100%' : '-100%',
     opacity: 0,
-    scale: 0.95
   }),
   center: {
     x: 0,
     opacity: 1,
-    scale: 1,
     transition: {
-      x: { type: 'spring', stiffness: 300, damping: 30 },
-      opacity: { duration: 0.2 },
-      scale: { duration: 0.2 }
+      x: { type: 'spring', stiffness: 250, damping: 28 },
+      opacity: { duration: 0.25 },
     }
   },
   exit: (direction: number) => ({
-    x: direction < 0 ? 300 : -300,
+    x: direction < 0 ? '100%' : '-100%',
     opacity: 0,
-    scale: 0.95,
     transition: {
-      x: { type: 'spring', stiffness: 300, damping: 30 },
-      opacity: { duration: 0.2 },
-      scale: { duration: 0.2 }
+      x: { type: 'spring', stiffness: 250, damping: 28 },
+      opacity: { duration: 0.25 },
     }
   })
 }
@@ -120,15 +110,32 @@ const PhotoGallery: React.FC = () => {
   const [activePhotoIndex, setActivePhotoIndex] = useState<number | null>(null)
   const [direction, setDirection] = useState(0)
 
+  // Premium toggleable / auto-hide UI states
+  const [showUI, setShowUI] = useState(true)
+  const [controlsVisible, setControlsVisible] = useState(true)
+  const timerRef = useRef<any>(null)
+
+  const resetAutoHideTimer = useCallback(() => {
+    setControlsVisible(true)
+    if (timerRef.current) {
+      clearTimeout(timerRef.current)
+    }
+    timerRef.current = setTimeout(() => {
+      setControlsVisible(false)
+    }, 3000)
+  }, [])
+
   const handleNext = useCallback(() => {
     setDirection(1)
     setActivePhotoIndex((prev) => (prev === null ? 0 : (prev + 1) % PHOTOS.length))
-  }, [])
+    resetAutoHideTimer()
+  }, [resetAutoHideTimer])
 
   const handlePrev = useCallback(() => {
     setDirection(-1)
     setActivePhotoIndex((prev) => (prev === null ? PHOTOS.length - 1 : (prev - 1 + PHOTOS.length) % PHOTOS.length))
-  }, [])
+    resetAutoHideTimer()
+  }, [resetAutoHideTimer])
 
   const handleClose = useCallback(() => {
     setActivePhotoIndex(null)
@@ -140,7 +147,24 @@ const PhotoGallery: React.FC = () => {
       handleNext()
     } else if (info.offset.x > swipeThreshold) {
       handlePrev()
+    } else {
+      resetAutoHideTimer()
     }
+  }
+
+  const handleImageTap = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setShowUI((prev) => {
+      const next = !prev
+      if (next) {
+        resetAutoHideTimer()
+      } else {
+        if (timerRef.current) {
+          clearTimeout(timerRef.current)
+        }
+      }
+      return next
+    })
   }
 
   // Keyboard controls
@@ -159,7 +183,39 @@ const PhotoGallery: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [activePhotoIndex, handleNext, handlePrev, handleClose])
 
+  // Prevent background scrolling
+  useEffect(() => {
+    if (activePhotoIndex !== null) {
+      document.body.style.overflow = 'hidden'
+      setShowUI(true)
+      resetAutoHideTimer()
+    } else {
+      document.body.style.overflow = ''
+      if (timerRef.current) {
+        clearTimeout(timerRef.current)
+      }
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [activePhotoIndex, resetAutoHideTimer])
+
   const activePhoto = activePhotoIndex !== null ? PHOTOS[activePhotoIndex] : null
+
+  // CSS transition utility classes
+  const closeButtonClass = !showUI 
+    ? 'opacity-0 pointer-events-none' 
+    : !controlsVisible 
+      ? 'opacity-25 hover:opacity-100 transition-opacity duration-300' 
+      : 'opacity-100 transition-opacity duration-300'
+
+  const controlsClass = (!showUI || !controlsVisible) 
+    ? 'opacity-0 pointer-events-none transition-opacity duration-300' 
+    : 'opacity-100 transition-opacity duration-300'
+
+  const captionClass = !showUI 
+    ? 'opacity-0 pointer-events-none transition-opacity duration-300' 
+    : 'opacity-100 transition-opacity duration-300'
 
   return (
     <div
@@ -256,7 +312,8 @@ const PhotoGallery: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/95 backdrop-blur-lg z-50 flex flex-col justify-between py-6 px-4 touch-none"
+            // PERFORMANCE: replaced bg-black/95 backdrop-blur-lg with bg-black/85 backdrop-blur-sm
+            className="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex flex-col justify-between py-6 px-4 touch-none"
             onClick={handleClose}
           >
             {/* Top Header Controls */}
@@ -264,15 +321,17 @@ const PhotoGallery: React.FC = () => {
               className="flex justify-between items-center w-full max-w-4xl mx-auto px-4 z-50"
               onClick={(e) => e.stopPropagation()}
             >
-              <span className="text-white/80 font-inter text-sm font-semibold tracking-wider">
+              <span className={`text-white/80 font-inter text-sm font-semibold tracking-wider ${controlsClass}`}>
                 {activePhotoIndex + 1} / {PHOTOS.length}
               </span>
+              
+              {/* SMART NAV CONTROL: Glassmorphism, border, small blur, min-48px */}
               <button
                 onClick={handleClose}
-                className="w-12 h-12 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-rose-400 min-h-[48px] min-w-[48px]"
+                className={`w-12 h-12 rounded-full bg-white/5 border border-white/10 backdrop-blur-[2px] text-white/60 flex items-center justify-center hover:bg-white/15 hover:text-white transition-all focus:outline-none focus:ring-2 focus:ring-rose-400 min-h-[48px] min-w-[48px] ${closeButtonClass}`}
                 aria-label="Close gallery"
               >
-                <X size={24} />
+                <X size={20} />
               </button>
             </div>
 
@@ -281,13 +340,13 @@ const PhotoGallery: React.FC = () => {
               className="relative w-full max-w-4xl mx-auto flex-grow flex items-center justify-center px-4"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Left Navigation Button */}
+              {/* Left Navigation Button - SMART NAV CONTROL */}
               <button
                 onClick={handlePrev}
-                className="absolute left-2 md:left-4 w-12 h-12 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors z-50 focus:outline-none focus:ring-2 focus:ring-rose-400 min-h-[48px] min-w-[48px]"
+                className={`absolute left-2 md:left-4 w-12 h-12 rounded-full bg-white/5 border border-white/10 backdrop-blur-[2px] text-white/60 flex items-center justify-center hover:bg-white/15 hover:text-white transition-all z-50 focus:outline-none focus:ring-2 focus:ring-rose-400 min-h-[48px] min-w-[48px] ${controlsClass}`}
                 aria-label="Previous photo"
               >
-                <ChevronLeft size={24} />
+                <ChevronLeft size={20} />
               </button>
 
               {/* Slide Image Wrapper */}
@@ -302,8 +361,10 @@ const PhotoGallery: React.FC = () => {
                     exit="exit"
                     drag="x"
                     dragConstraints={{ left: 0, right: 0 }}
-                    dragElastic={0.6}
+                    // Swipe resistance: slight resistance (dragElastic = 0.15) for iPhone/Google Photos momentum
+                    dragElastic={0.15}
                     onDragEnd={handleDragEnd}
+                    onClick={handleImageTap}
                     className="w-full h-full flex flex-col items-center justify-center cursor-grab active:cursor-grabbing select-none"
                   >
                     <motion.img
@@ -312,8 +373,9 @@ const PhotoGallery: React.FC = () => {
                       alt={activePhoto.caption}
                       className="max-h-[55vh] max-w-full object-contain rounded-2xl shadow-2xl pointer-events-none"
                     />
-                    {/* Caption */}
-                    <div className="text-center mt-6 px-4">
+                    
+                    {/* Caption: Tighter proximity (mt-4) and fades during Immersive mode */}
+                    <div className={`text-center mt-4 px-4 ${captionClass}`}>
                       <p className="text-white text-base md:text-lg font-inter font-medium leading-relaxed">
                         <span className="mr-2 text-xl select-none">{activePhoto.emoji}</span>
                         {activePhoto.caption}
@@ -323,13 +385,13 @@ const PhotoGallery: React.FC = () => {
                 </AnimatePresence>
               </div>
 
-              {/* Right Navigation Button */}
+              {/* Right Navigation Button - SMART NAV CONTROL */}
               <button
                 onClick={handleNext}
-                className="absolute right-2 md:right-4 w-12 h-12 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors z-50 focus:outline-none focus:ring-2 focus:ring-rose-400 min-h-[48px] min-w-[48px]"
+                className={`absolute right-2 md:right-4 w-12 h-12 rounded-full bg-white/5 border border-white/10 backdrop-blur-[2px] text-white/60 flex items-center justify-center hover:bg-white/15 hover:text-white transition-all z-50 focus:outline-none focus:ring-2 focus:ring-rose-400 min-h-[48px] min-w-[48px] ${controlsClass}`}
                 aria-label="Next photo"
               >
-                <ChevronRight size={24} />
+                <ChevronRight size={20} />
               </button>
             </div>
 
